@@ -1,0 +1,23 @@
+#톰캣 서버 설정
+server:
+   port: 8099
+
+
+#springboot에서 jsp view 인식 => 뷰리졸버 설정
+spring:
+   mvc:
+      view:
+         prefix:/WEB-INF/wiews/
+         suffix:.jsp
+         
+#DB Driver Set
+
+#MariaDB
+
+#Oracle
+   datasourse:
+      driver-class-name: oracle.jdbc.OracleDriver 
+      url : jdbc:oracle:thin:@localhost:1521/xe
+      username: system
+      password: 1234
+      
