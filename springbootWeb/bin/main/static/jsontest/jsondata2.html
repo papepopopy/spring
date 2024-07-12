@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JSON data send</title>
+<!-- bootstrap CDN연결 -->
+<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> -->
+<!--  local 연결 -->
+<link href="/bootstrap_5_3/css/bootstrap.min.css" rel="stylesheet" >
+
+</head>
+<body>	
+	<div class="container">
+		<h1>JSON data 보내기2</h1>
+		<hr>
+		<h3>jQuery에서 Ajax() 비동기 처리</h3>
+		<input type="button"  class="btn btn-success mb-3"
+				id="checkJson" 
+				value="글쓰기 json data 보내기/PUT(수정)하기">
+		<hr>
+		<input type="button"  class="btn btn-success mb-3"
+				id="aritcleView" 
+				value="게시글 조회 하기">
+		<hr>
+		
+		<h3>Axios: node.js와 브라우저를 위한 Promise기반 HTTP클라이언트</h3>
+		
+		<input type="button"  class="btn btn-success mb-3"
+				onClick="articleView();"
+				value="게시글 조회 하기(비동기처리)">
+		<input type="button"  class="btn btn-success mb-3"
+				onClick="articleView2();"
+				value="게시글 조회 하기2(async/await:동기처리)">
+		<hr>
+		<input type="button"  class="btn btn-success mb-3"
+				onClick="addArticle();"
+				value="게시글 등록 하기2(async/await:동기처리)">					
+				
+				
+		<div id="result" class="border p-3"></div>
+	</div>
+	
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+	var result = document.querySelector('#result');
+
+
+	// jQuery에서 Ajax() 비동기 처리
+	$(function(){
+		// 게시글 목록
+		$("#checkJson").click(function(){
+			var articleVO = {
+					articleNO: "114",
+					title: "Hello",
+					write: "홍길동114",
+					content: "상품 소개 글 입니다."
+			}
+			console.log("JSON객체:",articleVO)
+			console.log("JSON객체 문자열:",JSON.stringify(articleVO))
+			
+			$.ajax({
+				//type:"post",
+				//url: "/boards",
+				
+				// PUT방식으로 요청: 수정 작업
+				type: "put",
+				url: "/boards/114",
+				contentType: "application/json",
+				data: JSON.stringify(articleVO),
+				
+				success: function(data){
+					console.log("success");
+					
+					console.log(data);
+					//console.log(JSON.parse(data));
+					
+					$("#result").text(data);
+					//$("#result").text(JSON.stringify(data));
+					
+				},
+				error: function(){
+					console.log("error")
+				},
+				complete: function(){
+					console.log("compolete")
+				}
+			});
+		});
+		
+		// 게시글 조회
+		$("#aritcleView").click(function(){
+			var articleNO = "114";
+			
+			
+			$.ajax({
+				type:"get",
+				url: "/boards/"+articleNO,
+				contentType: "application/json",
+				data: JSON.stringify(articleNO),
+				
+				success: function(data){
+					console.log("success");
+					
+					console.log(data);
+					//console.log(JSON.parse(data));
+					
+					//$("#result").text(data);
+					$("#result").text(JSON.stringify(data));
+					
+				},
+				error: function(){
+					console.log("error")
+				},
+				complete: function(){
+					console.log("compolete")
+				}
+			});
+		});
+	});  
+	
+// ----------------------------------------------------- //	
+// Axios 처리
+// ----------------------------------------------------- //	
+function articleView(){ // 비동기 처리
+	console.log("articleView()");
+	let articleNO = 116;
+	
+	axios({
+		method: 'get',
+		url: "/boards/"+articleNO
+	})
+	.then( (response) => {
+		console.log("서버로부터 응답 받은 객체", response);
+		console.log("서버로부터 응답 받은 객체 data속성:", response.data);
+		console.log("서버로부터 응답 받은 객체 data속성에 있는 값:", response.data.articleNO);
+		
+		result.innerHTML =  JSON.stringify(response.data);
+	});
+}
+
+//------------------------------//
+// 동기 처리하는 함수만 정의
+//------------------------------//
+const getArticle = async (paramData) => {	 
+	const response = await axios.get("/boards/"+paramData);
+	return response;
+}
+const regArticle = async (paramData) => {
+	const response = await axios.post(
+				"/boards", 	// 요청할 주소(url)
+				paramData,  // 보낼 값(객체)
+				{			// data 형식
+					'Content-type': 'application/json',
+					'Accept': 'application/json'
+				} );
+	return response;
+}
+
+//------------------------------//
+
+
+// 동기처리하는 함수 호출
+function articleView2(){
+	console.log("articleView2()");
+	let articleNO = 116;
+	
+	getArticle(articleNO)
+		.then( (result) => {
+			console.log("success...");
+			console.log("result result:", result);
+			console.log("result result.data:", result.data);
+			console.log("result result.data.articleNO:", result.data.articleNO);
+			
+			result.innerHTML =  JSON.stringify(response.data);
+		})
+		.catch( e => { console.log("error ...")});
+}
+// 게시글 등록하기 요청
+function addArticle(){
+	console.log("addArticle()");
+	
+	var articleVO = {
+			articleNO: "118",
+			title: "Hello 118",
+			write: "홍길동118",
+			content: "상품 소개 글 입니다 118."
+	}
+	
+	regArticle(articleVO)
+		.then( (result) => {
+			console.log("게시글 등록 결과:",result);
+		})
+		.catch( e => { console.log("error ...")});
+}
+	
+	
+
+</script>	
+</body>
+</html>
