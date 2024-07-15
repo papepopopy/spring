@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "HTTP://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springstudy.springbootJsp.member.mapper.MemberXmlSQL">
+
+	<select id="getTime" resultType="String">
+		select sysdate from dual
+	</select>
+	<select id="getMemberList" resultType="com.springstudy.springbootJsp.member.vo">
+		select * from t_member
+	</select>
+	
+	<!-- 조회 -->
+	<select id="getMemberView" resultType="com.springstudy.springbootJsp.member.vo">
+		select*from t_member where id = #{id}
+	</select>
+	
+	<!-- 회원 수정 -->
+	<select id="insertMember" resultType="Int" parameterType="com.springstudy.springbootJsp.member.vo">
+		insert into t_member(id, pwd, name, email) values(#{id}, #{pwd}, #{name}, #{email})
+	</select>
+	
+	<!-- 삭제 -->
+	<select id="deleteMember">
+		delete from t_member where id = #{id}
+	</select>
+	
+	<!-- 업데이트 -->
+	<select id="updateMember" parameterType="com.springstudy.springbootJsp.member.vo">
+		update t_member
+			set pwd=#{pwd}, name=#{name}, email=#{email}
+			where id = #{id}
+	</select>
+	
+	<!-- 중복 체크 -->
+	<select id="idCheck" resultType="string">
+		select decode(count(*), 1, 'true', 'false') as isCheck
+		from t_member
+		where id=#{id}
+	</select>
+	
+</mapper>
