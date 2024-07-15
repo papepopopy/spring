@@ -6,7 +6,7 @@
 <configuration>
 
 	<typeAliases>
-		<!-- <typeAlias type=""/> -->
+		<!-- <typeAlias alias="MemberVO" type="com.springstudy.springbootJsp.member.vo.MemberVO"/> -->
 	</typeAliases>
 	
 

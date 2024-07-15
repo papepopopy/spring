@@ -26,6 +26,10 @@ public class MemberDAOMybatis {
 		return  session.selectOne("getTime");
 	}
 	
+	//----------------------------------------------- //
+	
+	
+	
 	// 회원 목록 조회
 	public List<MemberVO> getMemberList(){
 		return memberXmlSqlDao.getMemberList();
@@ -40,14 +44,37 @@ public class MemberDAOMybatis {
 		return session.selectOne("getMemberView", id);
 	}
 	// 회원 등록
-	public int insertMember(MemberVO vo) {
-		int isOK = 0;
-		isOK = memberXmlSqlDao.insertMember(vo);
+	public void insertMember(MemberVO vo) {
+		//int isOK = 0;
+		memberXmlSqlDao.insertMember(vo);
 		
 //		isOK = session.update("insertMember", vo);
 //		session.commit();
 		
-		return isOK;
+		return ;
+	}
+	
+	// 회원 삭제
+	public void deleteMember(String id) {
+				
+		 memberXmlSqlDao.deleteMember(id);
+		 //session.delete("deleteMember", id);
+		 //session.commit();
+		return;
+	}
+	
+	// 회원 수정
+	public void updateMember(MemberVO vo) {
+		memberXmlSqlDao.updateMember(vo);
+		
+		//session.update("updateMember", vo);
+		//session.commit();
+		return;
+	}
+	
+	// 중복 아이디 체크
+	public String idCheck(String id) {
+		return memberXmlSqlDao.idCheck(id); // 'true' or 'false' 반환
 	}
 	
 }

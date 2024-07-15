@@ -71,10 +71,48 @@ public class MemberController {
 		
 		logger.info("member/insert : "+vo);
 		
-		int isOK = memberDAO.insertMember(vo);
-		logger.info("=> member/insert isOK: "+isOK);
+		memberDAO.insertMember(vo);
+		//logger.info("=> member/insert isOK: "+isOK);
 
 		return  "indexjs";
+	}	
+	
+	@GetMapping("/remove")
+	public String removeMember(HttpServletRequest req) {
+		String id = req.getParameter("id");
+		logger.info("=> /remove id: "+id);
+		
+		memberDAO.deleteMember(id);
+		return "redirect:/member/list";
+	}
+	
+	@GetMapping("/modify")
+	public String modifyMembver(HttpServletRequest req) {
+		MemberVO vo = MemberVO.builder()
+				.id(req.getParameter("id"))
+				.pwd(req.getParameter("pwd"))
+				.name(req.getParameter("name"))
+				.email(req.getParameter("email"))
+				.build();
+		
+		logger.info("member/modify : "+vo);
+		
+		memberDAO.updateMember(vo);
+	
+		return "redirect:/member/list";
+	}
+	
+	@GetMapping("/idcheck")
+	public String idCheck(HttpServletRequest req) {
+		String id = req.getParameter("id");
+		
+		String isOK = memberDAO.idCheck(id);
+		
+		logger.info("=> /idcheck id: "+id);
+		logger.info("=> id check result: "+isOK);
+		logger.info("=> "+( isOK.equals("true") ? "이미 사용중인 아이디입니다.":"사용가능한 아이디입니다."));
+		
+		return "redirect:/member/list";
 	}
 
 }
